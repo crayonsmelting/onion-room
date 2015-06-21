@@ -1,6 +1,6 @@
-//Copyright (C) 2015 crayonsmelting - protected under Australian and International Copyright law 
-//crayonsmelting can be found at http://www.github.com/crayonsmelting/ or at crayons.melting@gmail.com 
-//Licence found within licence.txt 
+//Copyright (C) 2015 crayonsmelting - protected under Australian and International Copyright law
+//crayonsmelting can be found at http://www.github.com/crayonsmelting/ or at crayons.melting@gmail.com
+//Licence found within licence.txt
 ////////////////////////////////////////////////
 
 //GLOBALS
@@ -20,7 +20,7 @@ function cue(words) {
 }
 
 function read(words){
-
+console.log(words);
 };
 
 //----------------------------------------------------
@@ -29,7 +29,24 @@ function read(words){
 //introduction to a great adventure
 say( "\nThis okay game is COPYRIGHT (C) 2015 crayonsmelting. See licence.txt. " +
 	 "\nHey guy! Welcome to your new adventure.");
+beginning();
+
+//
+//Library
+//
 
 function beginning() {
 	say("\nPress enter to continue...")
+	read();
+	say("\n\n--------------------------------------------------------------------" +
+		"\n" +
+		"\nYou stand in a dark room, with a door to the north, south east and west." +
+		"\n		The door to the west is big, and made of metal." +
+		"\n		The door to the north is tiny, you'll have to crawl through it." +
+		"\n		The door to the south is a revolving door." +
+		"\n		The door to the east is normal, and boring. " +
+		"\n	 Type into the prompt:" +
+		"\n	");
 };
+
+
