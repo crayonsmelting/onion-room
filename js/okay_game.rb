@@ -165,7 +165,7 @@ Press enter to, err... enter."
 		puts "you didn't even say anything!"
 		failedCommand
 		elsif command == "panic"
-			puts "	HOW DO YOU EXPECT ME TO RESPOND TO SOMETHING LIKE THAT,
+			puts "HOW DO YOU EXPECT ME TO RESPOND TO SOMETHING LIKE THAT,
 	BUCKO? DO YOU THINK IT'S EASY REPLYING TO ALL YOUR BULL!? I DON'T
 	GET PAID ENOUGH FOR THIS!
 
