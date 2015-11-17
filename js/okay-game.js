@@ -14,7 +14,8 @@ GAME = {
 	player: {
 		gold: false,
 		dead: false
-	}
+	},
+	vault: {}
 }
 
 var _ = GAME;
@@ -22,12 +23,10 @@ var _ = GAME;
 //UI read/write
 
 function say(words) {
-	var words = words.split("\n");// separate at new line
-
+	words = words.replace(/\n/g,"<br/>");
+	words = words.replace(/\t/g,"&emsp;");
 	//append each line as its own paragraph
-	words.forEach( function(line) {
-		$(output).append("<p>" + line + "</p>");
-	});
+	$(output).append("<p>" + words + "</p>");
 }
 
 function sayMessage(words) {
@@ -40,15 +39,15 @@ function match(subject,matches){
 			if (matches[matchI] === subject){
 				return true
 			}
-			return false;
 		}
+		return false;
 	}else{
 		return subject === matches;
 	}
 }
 
 function commandIs(matches){
-	return match(command,matches);
+	return match(_.command,matches);
 }
 
 function read(){
@@ -56,40 +55,49 @@ function read(){
 	readCounter++;
 	console.log(readCounter);
 
-	caseSensCommand = input.val(); // collect value of commands
-	command = caseSensCommand.toLowerCase(); // collect value of commands for interpreting
+	_.caseSensCommand = input.val(); // collect value of commands
+	_.command = _.caseSensCommand.toLowerCase(); // collect value of commands for interpreting
 
 	//return unified values for alternative command wordings, or report an error
 	if (commandIs("")){
 		console.log("nothing");
 		return;
+	}
 
-	} else if (commandIs(["south","down","s"])){
-		command = "south";
+	console.log("running commands");
+	if (commandIs(["south","down","s"])){
+		_.command = "south";
 
 	} else if (commandIs(["north","n","forward","up"])) {
-		command = "north";
+		_.command = "north";
 
 	} else if (commandIs(["east","e","right"])) {
-		command = "east";
+		_.command = "east";
 
 	} else if (commandIs(["west","w","left"])) {
-		command = "west";
+		_.command = "west";
 	}
-	console.log("Player said '" + command + "'.");
+	console.log("Player said '" + _.command + "'.");
+	$(input).val('');
 	_.doNext();
 }
 
+function enterBreak(){
+	_.command = "";
+	_.enterBreak = true;
+	sayMessage("Press enter to continue...");
+}
 function noEvent() {
 	//For whenever the player is free to move around and do whatever
 	console.log("noEvent");
 	if (commandIs("panic")) {
 		lineBreak();
-		say( "\nHOW DO YOU EXPECT ME TO RESPOND TO SOMETHING LIKE THAT," +
+		say( "HOW DO YOU EXPECT ME TO RESPOND TO SOMETHING LIKE THAT," +
 				"\nBUCKO? DO YOU THINK IT'S EASY REPLYING TO ALL YOUR BULL?! I DON'T" +
 				"\nGET PAID ENOUGH FOR THIS!" +
 				"\n... " +
 				"\nWas that good enough?");
+		return true;
 	}
 
 }
@@ -102,19 +110,27 @@ function onionRoom() {
 	input = $("#input");
 
 	//introduction to a great adventure
-	sayMessage( "\nThis okay game is COPYRIGHT © 2015 crayonsmelting. See licence for info. " +
-			"\nHey guy! Welcome to your new adventure.");
-	sayMessage("\nPress enter to continue...");
-	_.enterBreak = true;
+	sayMessage( "This okay game is COPYRIGHT © 2015 crayonsmelting. See licence for info.");
+	say("\nHey guy! Welcome to your new adventure.");
+	enterBreak();
 
 	$(window).keydown(function(e){
-		if(e.keyCode == 13) {
+		if(e.which == 13) {
+			_.vault.typingPassword = false;
 			if (!_.enterBreak){ 
 					read();
 			} else {
 			_.enterBreak = false;
+			$(input).val('');
 			_.doNext();
 		}
+		} else if (_.vault.typingPassword){
+			var txt = $(output).children().last().text();
+			if (e.which == 8 && txt.length > 16){
+				$(output).children().last().text(txt.substring(0, txt.length - 1));
+			} else if (e.which != 8) {
+				$(output).children().last().text(txt + "*");
+			}
 		}
 	});
 
@@ -124,35 +140,73 @@ function onionRoom() {
 //
 
 function lineBreak() {
-	sayMessage("\n\t\n--------------------------------------------------------------------");
+	sayMessage("--------------------------------------------------------------------");
 }
 
 function beginning() {
 	console.log("beginning");
 	lineBreak();
-	say("\n" +
-			"\nYou stand in a dark room, with a door to the north, south east and west." +
-			"\n     The door to the west is big, and made of metal." +
-			"\n     The door to the north is tiny, you'll have to crawl through it." +
-			"\n     The door to the south is a revolving door." +
-			"\n     The door to the east is normal, and boring. " +
-			"\n	 Type into the prompt:" +
-			"\n	");
+	say("You stand in a dark room, with a door to the north, south east and west."); 
+	say("\tThe door to the west is big, and made of metal." +
+			"\n\tThe door to the north is tiny, you'll have to crawl through it." +
+			"\n\tThe door to the south is a revolving door." +
+			"\n\tThe door to the east is normal, and boring. ");
+	sayMessage("Type into the prompt:");
 	_.doNext = function(){ firstRoom()}
 };
 
 function firstRoom() {
 	console.log("first room");
-	//noEvent(firstRoom);
+	if (noEvent(firstRoom)) { return }
 	lineBreak();
 	if (commandIs("south")) {
-		say("\nYou go to the south." +
-				"\nYou enter the revolving door, and go round and round and round and round." +
-				"\nYou come out the same way you went in.");
+		sayMessage("You go to the south.");
+		say("You enter the revolving door, and go round and round and round and round." +
+			"\nYou come out the same way you went in.");
+		_.doNext = function(){ beginning()}
+		enterBreak();
+		return;
+
+	} else if (commandIs("east")) {
+		lineBreak();
+		say("You open the door and wa-- " +
+		"\n\"AAAAAAAAAAH!\" You scream. Behind the door seemed to be a" +
+		"large cliff. You fall, while still screaming.");
+		say("Falling..." +
+		"\nFalling...." +
+		"\nTHUD.");
+		say("You sit up with a jolt. Ah, phew it was all a dream..." +
+		"\nThis must be were the real adventure begins. You get up and" +
+		"\ntake a look around...");
+
+		_.doNext = function(){ beginning()}
+		enterBreak();
+		return;
+	} else if (commandIs("west")){
+		say("You walk up to the big, rock solid metal ... thing. " +
+		"\nYou look for a door handle, but you don't see any. " + 
+		"\nHmm, maybe it's voice activated, with a password. You give it a go. ");
+		say("Enter Password: ");
+		_.vault.typingPassword = true;
+		_.doNext = function(){ vaultEntry()}
+
 	} else {
-		sayMessage("\nI don't know what '" + caseSensCommand + "' means!");
+		sayMessage("I don't know what '" + _.caseSensCommand + "' means!");
 	}
-	_.doNext = function(){firstRoom()}
 }
 
+function vaultEntry(){
+	if (!_.vault.passAttempt1){
+		console.log("there aint no password");
+	say("...." +
+	"\n..........");
+	say("*ACCESS DENIED!*");
+	lineBreak();
+	say("Ah, wrong password. Maybe something else...");
+	say("Enter Password:");
+	} else if (!_.vault.passAttempt2){
+		console.log("there's an error in my code!");
+	}
 
+
+}

@@ -1,6 +1,7 @@
 console.log("running javascript");
 window.onload = function() {
 	console.log("running window");
+	$("#input").focus();
 	onionRoom();
 /* canvas stuff if I end up using it:
  *
