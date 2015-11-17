@@ -1,0 +1,8 @@
+Jquery (in js/jquery.js) is licenced under the MIT licence.
+
+Narrative text within say() function arguments is licenced under a Creative 
+Commons Attribution-ShareAlike 4.0 International License, with the addendum 
+that any distributed versions must contain it unmodified or have it removed,
+unless the licence holder has the express written permission of the author.
+
+All other computer code is licenced under the LGPL licence.
