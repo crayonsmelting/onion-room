@@ -15,7 +15,9 @@ GAME = {
 		gold: false,
 		dead: false
 	},
-	vault: {}
+	vault: {
+		passAttempts: 0
+	}
 }
 
 var _ = GAME;
@@ -23,10 +25,15 @@ var _ = GAME;
 //UI read/write
 
 function say(words) {
+	//todo: grey out old text to make what's new stand out
+	
+	//convert \n to paragraphs and \t to tabs in html
 	words = words.replace(/\n/g,"<br/>");
 	words = words.replace(/\t/g,"&emsp;");
 	//append each line as its own paragraph
 	$(output).append("<p>" + words + "</p>");
+	//scroll to bottom of page
+	$("body").scrollTop($("body")[0].scrollHeight);
 }
 
 function sayMessage(words) {
@@ -82,11 +89,15 @@ function read(){
 	_.doNext();
 }
 
-function enterBreak(){
+function enterBreak(message){
+	//basically just triggers a flag to tell the parser not to do anything special
 	_.command = "";
 	_.enterBreak = true;
-	sayMessage("Press enter to continue...");
+	if (message !== undefined) { sayMessage(message) }
+	else { sayMessage("Press enter to continue...") }
+
 }
+
 function noEvent() {
 	//For whenever the player is free to move around and do whatever
 	console.log("noEvent");
@@ -122,6 +133,7 @@ function onionRoom() {
 			} else {
 			_.enterBreak = false;
 			$(input).val('');
+			lineBreak();
 			_.doNext();
 		}
 		} else if (_.vault.typingPassword){
@@ -145,7 +157,6 @@ function lineBreak() {
 
 function beginning() {
 	console.log("beginning");
-	lineBreak();
 	say("You stand in a dark room, with a door to the north, south east and west."); 
 	say("\tThe door to the west is big, and made of metal." +
 			"\n\tThe door to the north is tiny, you'll have to crawl through it." +
@@ -168,7 +179,6 @@ function firstRoom() {
 		return;
 
 	} else if (commandIs("east")) {
-		lineBreak();
 		say("You open the door and wa-- " +
 		"\n\"AAAAAAAAAAH!\" You scream. Behind the door seemed to be a" +
 		"large cliff. You fall, while still screaming.");
@@ -176,8 +186,8 @@ function firstRoom() {
 		"\nFalling...." +
 		"\nTHUD.");
 		say("You sit up with a jolt. Ah, phew it was all a dream..." +
-		"\nThis must be were the real adventure begins. You get up and" +
-		"\ntake a look around...");
+		"\nThis must be were the real adventure begins." +
+	   	"\nYou get up and take a look around...");
 
 		_.doNext = function(){ beginning()}
 		enterBreak();
@@ -197,16 +207,79 @@ function firstRoom() {
 
 function vaultEntry(){
 	if (!_.vault.passAttempt1){
-		console.log("there aint no password");
-	say("...." +
-	"\n..........");
-	say("*ACCESS DENIED!*");
-	lineBreak();
-	say("Ah, wrong password. Maybe something else...");
-	say("Enter Password:");
-	} else if (!_.vault.passAttempt2){
-		console.log("there's an error in my code!");
+		say("...." +
+		"\n..........");
+		say("*ACCESS DENIED!*");
+		say("Ah, wrong password. Maybe something else...");
+		say("Enter Password:");
+		_.vault.typingPassword = true;
+		_.vault.passAttempt1 = _.command;
+		_.vault.passAttempts++;
+	} else {
+		console.log("attempt number 2");
+		if (commandIs(_.vault.passAttempt1)){
+			if ( _.vault.passAttempts == 1){
+				lineBreak();
+				say("...." +
+				"\n..........");
+				say("*ACCESS DENIED!*");
+				say("Well duh, you said the same thing again. You're not sure what you were epxecting. Well, may as well try again:");
+				say("Enter Password:");
+				_.vault.typingPassword = true;
+				_.vault.passAttempts++;
+			} else if (_.vault.passAttempts == 2){
+				lineBreak();
+				say("...." +
+				"\n..........");
+				say("*ACCESS DENIED!*");
+				say("You're starting to compare your mental capacity to some bacon." +
+					"\nMaybe it's a sign. But you're not going to give up:");
+				say("Enter Password:");
+				_.vault.typingPassword = true;
+				_.vault.passAttempts++;
+			} else if (_.vault.passAttempts == 3){
+				_.vault.doorPity = true;
+				lineBreak();
+				say("....")
+				say("The door is really starting to feel sorry for you, poor thing..." +
+					"\nMaybe you were involed in a tragic accident, or maybe you were born with it." +
+					"\nIt decides to let you in anyway...");
+				say("..........");
+				say("*ACCESS GRANTED!*");
+	say("The door opens, shaking the entire room. It's pretty scary." +
+			"You cover your eyes, partially out of fear, mostly just because the inside is really bright.");
+				sayMessage("Press enter to uh... enter...");
+				_.doNext = function(){ vaultInt()}
+				return;
+			}
+		} else {
+			lineBreak();
+			say("...." +
+			"\n..........");
+			say("*ACCESS GRANTED!*");
+			say("Whew, that was easy...");
+	say("The door opens, shaking the entire room. It's pretty scary." +
+			"You cover your eyes, partially out of fear, mostly just because the inside is really bright.");
+			enterBreak("Press enter to uh... enter...");
+			_.doNext = function(){ vaultInt()}
+		}
 	}
+}
 
-
+function vaultInt(){
+	say("Inside the concrete room is mountains, and mountains.");
+	say("AND MOUNTAINS.");
+	say("Of beautiful, beautiful gold. You're more tricked out than Harry Potter!" +
+		"\nYou're super excited until you realise - you don't have any pockets." +
+		"\nYou squeeeeeze as much gold as you can into your undies.");
+	if (_.gold){
+		say("It's really hard, considering you've already stuffed them full of gold.");
+	}
+	say("There's not really much more you can do in here, so you disappointedly drudge out.");
+	if (_.vault.doorPity){
+		say("The door feels even worse. He never should have signed up for this...");
+	}
+	say("There is a loud thud of the door behind you.");
+	enterBreak();
+	_.doNext = function(){ beginning()}
 }
