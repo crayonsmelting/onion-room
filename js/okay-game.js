@@ -109,6 +109,14 @@ function noEvent() {
 				"\n... " +
 				"\nWas that good enough?");
 		return true;
+	} else if ((/is the best/).test(_.command)){
+		lineBreak();
+		say("And oh so modest!");
+		return true;
+	} else if (commandIs("is the best")){
+		lineBreak();
+		say("Nah it's screwed");
+		return true;
 	}
 
 }
@@ -199,7 +207,15 @@ function firstRoom() {
 		say("Enter Password: ");
 		_.vault.typingPassword = true;
 		_.doNext = function(){ vaultEntry()}
-
+	} else if (commandIs("north")){
+		console.log("northed");
+		console.log("hit");
+		say("You chose the tiny, little door. You squeeeeze in." +
+		"\nInside is a small cottage-like interior. There's a little leprechaun sitting in a little arm chair." +
+		"\n\"Eh? What de yeh thin' you're doin', Laddie?\" He asks." +
+		"\n\"Yeh can' joost burst inte me hoose like that!\"");
+		say("How do you reply?");
+		_.doNext = function(){ lepReply() }
 	} else {
 		sayMessage("I don't know what '" + _.caseSensCommand + "' means!");
 	}
@@ -281,5 +297,15 @@ function vaultInt(){
 	}
 	say("There is a loud thud of the door behind you.");
 	enterBreak();
+	_.doNext = function(){ beginning()}
+}
+
+function lepReply(){
+	lineBreak();
+	say("\"I haven' heard sooch gurbage in me life." +
+		"\nDiddley-Dee Diddle-Dee, get oot get oot get oot!" +
+		"\n'" + _.caseSensCommand + "' indeed... Why I should spank yeh!\"");
+	say("He gives you a great big kick on the bum, and you go flying out the door." +
+		"\nYou hear a loud thud, along with some quiet muttering.");
 	_.doNext = function(){ beginning()}
 }
