@@ -30,10 +30,13 @@ function say(words) {
 	//convert \n to paragraphs and \t to tabs in html
 	words = words.replace(/\n/g,"<br/>");
 	words = words.replace(/\t/g,"&emsp;");
+
 	//append each line as its own paragraph
 	$(output).append("<p>" + words + "</p>");
+
 	//scroll to bottom of page
-	$("body").scrollTop($("body")[0].scrollHeight);
+	var gameWindow = $("#onion-room-game")[0];
+	gameWindow.scrollTop = gameWindow.scrollHeight;
 }
 
 function sayMessage(words) {
