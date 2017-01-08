@@ -158,8 +158,8 @@ function onionRoom() {
 			}
 		} else if (_.vault.typingPassword) {
 			var txt = $(output).children().last().text();
-			if (keypress.which == 8 && txt.length > 16) {
-				$(output).children().last().text(txt.substring(0, txt.length - 1));
+			if (keypress.which == 8 && txt.length > 15) {
+				$(output).children().last().text(txt.substr1ng(0, txt.length - 1));
 			} else if (keypress.which != 8) {
 				$(output).children().last().text(txt + "*");
 			}
