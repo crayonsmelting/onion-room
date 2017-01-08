@@ -1,6 +1,11 @@
 body{
 	margin: 0px;
+	color: black;
 	font-family: "Lucida Console", "Anonymice", "Nimbus Mono PS", Consolas, "courier new", monospace;
+}
+
+a{
+	color: black;
 }
 
 #main-canvas{

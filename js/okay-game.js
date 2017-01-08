@@ -141,7 +141,7 @@ function onionRoom() {
 	input = $("#input");
 
 	//introduction to a great adventure
-	sayMessage( "This okay game is COPYRIGHT © 2015 crayonsmelting. See licence for info.");
+	sayMessage( "This okay game is COPYRIGHT © 2015 crayonsmelting. See the <a href=licence.html>licence</a> for info.");
 	say("\nHey guy! Welcome to your new adventure.");
 	enterBreak();
 
