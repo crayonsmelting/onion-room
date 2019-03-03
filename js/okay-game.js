@@ -1,5 +1,5 @@
-//Copyright (C) 2015 crayonsmelting - protected under Australian and International Copyright law
-//crayonsmelting can be found at http://www.github.com/crayonsmelting/ or at crayons.melting@gmail.com
+//Copyright (C) 2015 Michael Ruigrok - protected under Australian and International Copyright law
+//Michael can be found at http://www.github.com/michaelruigrok/ or at ruigrok.michael@gmail.com
 //Licence found within licence.txt
 
 /////////////////////http://nomediakings.org/guildedyouth////////////////////////////
@@ -141,7 +141,7 @@ function onionRoom() {
 	input = $("#input");
 
 	//introduction to a great adventure
-	sayMessage( "This okay game is COPYRIGHT © 2015 crayonsmelting. See the <a href=licence.html>licence</a> for info.");
+	sayMessage( "This okay game is COPYRIGHT © 2015-2019 Michael Ruigrok. See the <a href=licence.html>licence</a> for info.");
 	say("\nHey guy! Welcome to your new adventure.");
 	enterBreak();
 
