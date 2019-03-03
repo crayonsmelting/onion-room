@@ -4,6 +4,8 @@
 
 /////////////////////http://nomediakings.org/guildedyouth////////////////////////////
 
+var onionRoom = (function () {
+
 /* GLOBALS */
 
 var readCounter = 0;
@@ -135,7 +137,7 @@ function noEvent() {
 
 //----------------------------------------------------
 
-function onionRoom() {
+function main() {
 	//Find where the output and prompt are
 	output = $("#output");
 	input = $("#input");
@@ -323,3 +325,7 @@ function lepReply() {
 		"\nYou hear a loud thud, along with some quiet muttering.");
 	_.doNext = beginning;
 }
+
+return main;
+
+})();
