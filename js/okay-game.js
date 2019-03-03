@@ -41,7 +41,7 @@ function say(words) {
 	words = words.replace(/\t/g,"&emsp;");
 
 	//append each line as its own paragraph
-	$(output).append("<p>" + words + "</p>");
+	output.append("<p>" + words + "</p>");
 
 	//scroll to bottom of page
 	var gameWindow = $("#onion-room-game")[0];
@@ -97,7 +97,7 @@ function read() {
 		_.command = "west";
 	}
 	console.log("Player said '" + _.command + "'.");
-	$(input).val('');
+	input.val('');
 	_.doNext();
 }
 
@@ -147,35 +147,44 @@ function main() {
 	say("\nHey guy! Welcome to your new adventure.");
 	enterBreak();
 
-	$(window).keydown(function(keypress) {
+	$(window).keyup(function(keypress) {
 		if(keypress.which == 13) {
 			_.vault.typingPassword = false;
 			if (!_.enterBreak) { 
 				read();
 			} else {
 				_.enterBreak = false;
-				$(input).val('');
+				input.val('');
 				lineBreak();
 				_.doNext();
 			}
 		} else if (_.vault.typingPassword) {
-			var txt = $(output).children().last().text();
-			if (keypress.which == 8 && txt.length > 15) {
-				$(output).children().last().text(txt.substr1ng(0, txt.length - 1));
-			} else if (keypress.which != 8) {
-				$(output).children().last().text(txt + "*");
-			}
+			updatePasswordPrompt();
 		}
 	});
 
+	// Make the password field update more immediately
+	$(window).keydown(function(keypress) {
+		updatePasswordPrompt();
+	});
+
 }
-//
-//Story Events
-//
 
 function lineBreak() {
 	sayMessage("--------------------------------------------------------------------");
 }
+
+function updatePasswordPrompt() {
+	if (_.vault.typingPassword) {
+		var linePrompt = "Enter Password: ";
+		var password = "*".repeat(input.val().length);
+		output.children().last().text(linePrompt + password);
+	}
+}
+
+//
+//Story Events
+//
 
 function take(object) {
 }
