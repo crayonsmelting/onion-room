@@ -1,6 +1,8 @@
 #!/usr/bin/clojure
 (ns onion-room.core
-	(:require [clojure.spec.alpha :as s])
+	(:require [clojure.spec.alpha :as s]
+			  [onion-room.engine :refer [say]]
+			  )
 	)
 
 ; For use in GAME object, if I use it
@@ -9,17 +11,12 @@
 
 (def GAME
 	{::player {
-			   gold false
+			   ::gold false
 			   }
 	 }
 	)
-
 (def input (.getElementById js/document "input"))
 (def output (.getElementById js/document "output"))
 
-(defn say [text]
-	(.insertAdjacentHTML output "beforeend" text)
-)
 
 (say "Welcome to your cool new adventure!")
-(println "Welcome to your cool new adventure!")
