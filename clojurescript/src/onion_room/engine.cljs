@@ -4,13 +4,15 @@
 
 (def input (.getElementById js/document "input"))
 (def output (.getElementById js/document "output"))
+(.focus input)
 
 (defn say
 	[& lines]
 	(def p (.createElement js/document "p"))
-		(doseq [text lines]
-			(.appendChild p (.createTextNode js/document text))
-			(.appendChild p (.createElement js/document "br"))
-			)
+	(doseq [text lines]
+		(.appendChild p (.createTextNode js/document text))
+		(.appendChild p (.createElement js/document "br"))
+		)
 	(.appendChild output p)
+	(.scrollIntoView p)
 	)

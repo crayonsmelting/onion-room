@@ -2,6 +2,7 @@
 (ns onion-room.core
 	(:require [clojure.spec.alpha :as s]
 			  [onion-room.engine :refer [say]]
+			  [onion-room.engine :as eng]
 			  )
 	)
 
@@ -15,8 +16,5 @@
 			   }
 	 }
 	)
-(def input (.getElementById js/document "input"))
-(def output (.getElementById js/document "output"))
-
 
 (say "Welcome to your cool new adventure!")
