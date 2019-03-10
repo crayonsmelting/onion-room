@@ -2,9 +2,17 @@
 (ns onion-room.engine
 	)
 
+(defmacro ^:private nskey [macro]
+	(keyword *ns* macro))
+
 (def input (.getElementById js/document "input"))
 (def output (.getElementById js/document "output"))
 (.focus input)
+
+(defn formatLink
+	"Return a link in a platform-appropriate format"
+	[url displayText]
+	(str "<a href='"url"'>"displayText"</a>"))
 
 (defn say
 	[& lines]
@@ -16,7 +24,18 @@
 	(.appendChild output p)
 	(.scrollIntoView p)
 	)
+
+(defn updatePara
+	[para func]
+	(func)
+	)
+
+(defn updateLastPara
+	[func]
+	)
+
 ; This queue is used to store input
+;(def ^:private commandQueue (atom #queue []))
 (def ^:private commandQueue #queue [])
 
 (defn parseInput [event]
