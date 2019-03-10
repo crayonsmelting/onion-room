@@ -16,3 +16,20 @@
 	(.appendChild output p)
 	(.scrollIntoView p)
 	)
+; This queue is used to store input
+(def ^:private commandQueue #queue [])
+
+(defn parseInput [event]
+	(when
+		(and (= (.-code event) "Enter")
+			(not= "" (.-value input)))
+		(say
+			(str "> " (.-value input)))
+		(def commandQueue (conj commandQueue (.-value input)))
+		(set! (.-value input) "")
+		(.log js/console (print-str commandQueue))
+		(.log js/console input)
+		)
+	)
+
+(.addEventListener input "keyup" parseInput)
