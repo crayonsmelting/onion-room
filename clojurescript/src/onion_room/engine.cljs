@@ -2,9 +2,6 @@
 (ns onion-room.engine
 	)
 
-(defmacro ^:private nskey [macro]
-	(keyword *ns* macro))
-
 (defn formatLink
 	"Return a link in a platform-appropriate format"
 	[url displayText]
@@ -47,7 +44,6 @@
 		)
 	)
 
-; TODO: need a way for readCommand to block until a read command can be read!
 (defn peekPop
 	"Return the first item, and pop that item from the hidden underlying queue"
 	[atomicQueue]
@@ -96,6 +92,6 @@
 	([game io]
 	 (let [io (merge io {:commandQueue (makeCommandQueue)})]
 		 (.focus (io :input))
-		 (apply sayParas io (game))
+		 (apply sayParas io ((game) :output))
 		 (merge io {:eventListener (makeParseInputEvent io)})
 		 )))
